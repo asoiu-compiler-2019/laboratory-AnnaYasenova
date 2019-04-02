@@ -27,6 +27,20 @@ class Lexer:
             self.file.seek(self.file.tell() - 1)
             self.current_column -= 1
 
+            
+    def return_all_tokens(self):
+        curr_token = self.next_token()
+        tokens_arr = []
+        while curr_token.tag != Tag.END_OF_FILE:
+            tokens_arr.append(curr_token)
+            curr_token = self.next_token()
+            
+        tokens_arr.append(curr_token)
+        
+        return tokens_arr
+    
+    
+    
     def next_token(self):
         lexeme = ""
         current_state = self.INITIAL_STATE
@@ -66,6 +80,8 @@ class Lexer:
                     return Token(Tag.LBRACKET, '[', self.current_line, self.current_column)
                 elif self.last_read_char == ']':  # Go to state 38
                     return Token(Tag.RBRACKET, ']', self.current_line, self.current_column)
+                elif self.last_read_char == '.':  # Go to state 38
+                    return Token(Tag.DOT, '.', self.current_line, self.current_column) 
                 elif self.last_read_char == '<':  # Go to state 8
                     lexeme += self.last_read_char
                     current_state = 8
@@ -78,7 +94,9 @@ class Lexer:
                 elif self.last_read_char == '+':  # Go to state 18
                     return Token(Tag.PLUS, '+', self.current_line, self.current_column)
                 elif self.last_read_char == '-':  # Go to state 19
-                    return Token(Tag.MINUS, '-', self.current_line, self.current_column)
+                    lexeme += self.last_read_char
+                    current_state = 19
+                    #return Token(Tag.MINUS, '-', self.current_line, self.current_column)
                 elif self.last_read_char == '*':  # Go to state 20
                     return Token(Tag.TIMES, '*', self.current_line, self.current_column)
                 
@@ -89,10 +107,14 @@ class Lexer:
                 elif self.last_read_char.isdigit():  # Go to state 26 (number)
                     lexeme += self.last_read_char
                     current_state = 26    
-                    #________________________________-
                 elif self.last_read_char == '"':  # Go to state 32
                     current_state = 32
-                    #_________________
+                elif self.last_read_char == '&':  # Go to state 39
+                    return Token(Tag.AND, '&', self.current_line, self.current_column)
+                elif self.last_read_char == 'OR':  # Go to state 40
+                    return Token(Tag.OR, 'OR', self.current_line, self.current_column)
+                elif self.last_read_char == '\'':  # Go to state 43
+                    current_state = 43
                 else:
                     self.raise_lexical_error(self.last_read_char, self.current_line, self.current_column)
                     self.was_error_raised = False
@@ -138,6 +160,13 @@ class Lexer:
                 else:  # Go to state 17 - Final State -
                     self.seek_to_previous_position()
                     return Token(Tag.ASSIGN, lexeme, self.current_line, self.current_column)
+            elif current_state == 19:
+                if self.last_read_char == '>':  # Go to state 41 - Final State -
+                    lexeme += self.last_read_char
+                    return Token(Tag.DIRECTION_UP, lexeme, self.current_line, self.current_column)
+                else:  # Go to state 42 - Final State -
+                    self.seek_to_previous_position()
+                    return Token(Tag.MINUS, '-', self.current_line, self.current_column)
             
             elif current_state == 21:
                 if self.last_read_char == '*':  # Go to state 22
@@ -223,7 +252,9 @@ class Lexer:
                         self.raise_error("Literal values must be closed with double quote before a new line starts", self.current_line, self.current_column)
                     self.current_line += 1
                     self.current_column = 1
+                    current_state = 1
                 elif self.last_read_char == '"' and not self.was_error_raised:
+                    current_state = 1
                     self.raise_error("Empty literal values are not allowed", self.current_line, self.current_column)
                 elif self.is_ascii(self.last_read_char):
                     lexeme += self.last_read_char
@@ -243,8 +274,51 @@ class Lexer:
 
                     self.current_line += 1
                     self.current_column = 1
+                    current_state = 1
                 elif self.is_ascii(self.last_read_char):
                     lexeme += self.last_read_char
+                elif not self.was_error_raised:
+                    self.raise_lexical_error(self.last_read_char, self.current_line, self.current_column)
+                    
+                   
+            elif current_state == 43:
+                self.was_error_raised = False
+
+                if self.last_read_char == self.END_OF_FILE and not self.was_error_raised:
+                    self.raise_lexical_error("Character literal must be closed with single quote before end of file", self.current_line, self.current_column)
+                elif self.last_read_char == self.NEW_LINE:
+                    if not self.was_error_raised:
+                        self.raise_error("Character literal must be closed with single quote before a new line starts", self.current_line, self.current_column)
+                    self.current_line += 1
+                    self.current_column = 1
+                    current_state = 1
+                elif self.last_read_char == '\'' and not self.was_error_raised:
+                    self.raise_error("Empty character literal is not allowed", self.current_line, self.current_column)
+                    current_state = 1
+                elif self.is_ascii(self.last_read_char):
+                    lexeme += self.last_read_char
+                    current_state = 44
+                elif not self.was_error_raised:
+                    self.raise_lexical_error(self.last_read_char, self.current_line, self.current_column)
+
+            elif current_state == 44:
+                if self.last_read_char == '\'':  # Go to state 45 - Final State - Return the token
+                    self.was_error_raised = False
+                    return Token(Tag.CHARACTER_LITERAL, lexeme, self.current_line, self.current_column)
+                elif self.last_read_char == self.END_OF_FILE and not self.was_error_raised:
+                    self.raise_error("Character literal must be closed with single quote before end of file", self.current_line, self.current_column)
+                elif self.last_read_char == self.NEW_LINE:
+                    if not self.was_error_raised:
+                        self.raise_error("Character literal must be closed with single quote before a new line starts", self.current_line, self.current_column)
+
+                    self.current_line += 1
+                    self.current_column = 1
+                    current_state = 1
+                elif self.is_ascii(self.last_read_char):
+                    if not self.was_error_raised:
+                        current_state = 1
+                        self.raise_error("Character literal is not allows more than 1 char.", self.current_line, self.current_column)
+
                 elif not self.was_error_raised:
                     self.raise_lexical_error(self.last_read_char, self.current_line, self.current_column)
 

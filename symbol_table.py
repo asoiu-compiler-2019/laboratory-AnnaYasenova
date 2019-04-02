@@ -6,8 +6,8 @@ class SymbolTable:
 
     def __init__(self):
         self.table = dict()
-        self.table["&&"] = Token(Tag.AND, "&&")
-        self.table["||"] = Token(Tag.OR, "||")
+        self.table["&"] = Token(Tag.AND, "&")
+        self.table["|"] = Token(Tag.OR, "|")
         self.table["=="] = Token(Tag.EQ, "==")
         self.table["<"] = Token(Tag.LT, "<")
         self.table[">"] = Token(Tag.RT, ">")
@@ -31,10 +31,13 @@ class SymbolTable:
         self.table["ugu"] = Token(Tag.BOOLEAN_LITERAL_TRUE, "ugu")
         self.table["net"] = Token(Tag.BOOLEAN_LITERAL_FALSE, "net")
         
-
+        self.table['.'] = Token(Tag.DOT, ".")
+        
         self.table["->"] = Token(Tag.DIRECTION_UP, "->")
         self.table["<-"] = Token(Tag.DIRECTION_DOWN, "<-")   
         self.table["main"] = Token(Tag.MAIN, "main")
+        self.table["func"] = Token(Tag.FUNCTION, "func")
+        self.table["void"] = Token(Tag.VOID, "void")
         self.table["boolean"] = Token(Tag.BOOLEAN, "boolean")
         self.table["integer"] = Token(Tag.INTEGER, "integer")
         self.table["float"] = Token(Tag.FLOAT, "float")
@@ -48,8 +51,7 @@ class SymbolTable:
         self.table["let"] = Token(Tag.LET, "let")
         self.table["if"] = Token(Tag.IF, "if")
         self.table["else"] = Token(Tag.ELSE, "else")
-        self.table["elif"] = Token(Tag.ELIF, "elif")
-        self.table["for"] = Token(Tag.FOR, "for")
+        self.table["while"] = Token(Tag.WHILE, "while")
         self.table["return"] = Token(Tag.RETURN, "return")
 
     def include(self, lexeme, tag):

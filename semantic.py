@@ -356,9 +356,3 @@ class SemanticAnalyzer:
             self.analyze(s, bodyScope)
 
         self.functionDeclarations.append(f)
-
-
-tmp = SemanticAnalyzer('parser_test.txt')
-
-
-tmp.analyze_file()

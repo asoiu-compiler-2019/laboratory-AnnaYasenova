@@ -108,9 +108,6 @@ class VarDeclaration:
         self.value = v
 
 
-# In[3]:
-
-
 class Expression:
 
     def get_value(self):
@@ -1233,36 +1230,3 @@ class Parser:
                 self.eat(Tag.UNKNOWN)
                 self.next_token()
                 return None
-
-
-# In[58]:
-
-
-# lexer = Lexer('parser_test.txt')
-#parser = Parser('parser_test.txt')
-
-#for t in parser.tokens:
-#    print(t)
-
-# In[61]:
-
-
-#res = parser.parse()
-
-# In[41]:
-
-
-#print(res[0].cond_exp)
-
-# In[42]:
-
-
-#print(res[0].loop_stm)
-
-# In[ ]:
-
-
-#
-
-
-
