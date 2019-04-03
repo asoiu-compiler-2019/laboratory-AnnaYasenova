@@ -1,0 +1,25 @@
+output("no dopka ples");
+
+let integer counter;
+counter = 3;
+
+while (counter < 5) {
+    output(numtoa(counter));
+    counter = counter + 1;
+}
+
+if (ugu) {
+    output("output from condition");
+}
+
+let pair testPair;
+testPair = {
+    left = "EUR";
+    right = "USD";
+}
+
+let rate EURUSD;
+EURUSD = {
+    rateValue = 1.13;
+    ratePair = testPair;
+}

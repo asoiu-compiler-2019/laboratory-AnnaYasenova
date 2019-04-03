@@ -1,0 +1,91 @@
+func boolean isPositive(num direction) {
+    if (num == ->) {
+        return ugu;
+    }
+    else {
+        return net;
+    }
+}
+
+func direction calcDirection(r1 rate, r2 rate) {
+    if (not r1.ratePair == r2.ratePair) {
+        r1 = rateToUSD(r1);
+        r2 = rateToUSD(r2);
+    }
+    if (r1.rateValue < r2.rateValue) {
+        return ->;
+    }
+    else {
+        return <-;
+    }
+}
+
+func void outputCompareResults(r1 rate, r2 rate) {
+    let direction testDirection;
+    testDirection = calcDirection(testRate1, testRate2);
+    let boolean directionSign;
+    directionSign = isPositive(testDirection);
+    if (directionSign == ugu) {
+        output("The price has positive dynamic.");
+    }
+    else {
+        output("The price has negative dynamic.");
+    }
+}
+
+func trend combineTrendValue(r1 rate, r2 rate) {
+    let trend trendCombined;
+    let float chValue;
+    let direction trDirection;
+
+    if (r1.rateValue < r2.rateValue) {
+        trDirection = ->;
+        chValue = r2.rateValue - r1.rateValue;
+    }
+    else {
+        trDirection =  <-;
+        chValue = r1.rateValue - r2.rateValue;
+    }
+
+    trendCombined.trendSize = chValue;
+    trendCombined.trDirection = trDirection;
+    return trendCombined;
+}
+
+
+func rate changeRate(testRate rate, testTrend trend) {
+    let rate newRate;
+    newRate.ratePair = testRate.ratePair;
+    if (testTrend.trDirection == ->) {
+        newRate.rateValue = testRate.rateValue + testTrend.trendSize;
+    }
+    else {
+        newRate.rateValue = testRate.rateValue - testTrend.trendSize;
+    }
+    return newRate;
+}
+
+let pair testPair;
+testPair.left = "EUR";
+testPair.right = "USD";
+
+let rate testRate1;
+
+testRate1.ratePair = testPair;
+testRate1.rateValue = 1.21;
+
+let rate testRate2;
+
+testRate2.ratePair = testPair;
+testRate2.rateValue = 1.25;
+
+outputCompareResults(testRate1, testRate2);
+
+let trend testTrend;
+testTrend = combineTrendValue(testRate1, testRate2);
+
+let testRate3;
+testRate3 = changeRate(tesRate2, testTrend);
+
+output("If the dynamic does not change, next price value is");
+output(numtoa(testRate3.rateValue));

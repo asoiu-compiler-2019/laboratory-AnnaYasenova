@@ -1,0 +1,50 @@
+BNF
+Lexical rules
+
+symbols ::= a | b | ... | z | A | B | ... | Z | _  ([a-zA-Z])
+digit ::= 0 | 1 | … | 9
+sign ::= + | -
+decimal-point ::= .
+operator ::= + | - | * | / | = | == | <= | >= | > | < | .
+un_op ::= not
+identifier ::= symbols {symbols | digit}
+integerLiteral ::= digit {digit}
+booleanLiteral ::= ugu | net
+directionLiteral ::= -> | <-
+floatingLiteral::= [sign] {digit}[decimal-point {digit}]
+
+
+unicodeCharacter - any printable unicode character (used in strings)
+characterLiteral ::= ‘unicodeCharacter’
+stringLiteral ::= “{unicodeCharacter}”
+
+
+Syntax rules
+
+
+type ::= boolean | integer | float | string | direction | reserved_type
+
+declaration_rule ::=  type identifier
+
+reserved_type ::= rate | trend | direction | trader | name | pair
+
+Thanks to second variant it can be used as type literal.
+
+parameter_types ::= type identifier {‘,’ type identifier}
+
+variable_decl ::= “let” type identifier;
+
+binary_operation ::= + | - | * | / | .
+
+rel_operation ::= == | <= | >= | < | >
+
+logical_operation ::= & | |
+
+expression ::= un_op expression | expression binary_operation expression | expression rel_operation expression | expression logical_operation expression | ‘(’ expression ‘)’ | identifier [ ‘(’ [ expression {‘,’ expression } ] ‘)’ ] | integerLiteral | booleanLiteral | characterLiteral | floatingLiteral | stringLiteral
+
+assignment ::= identifier ‘=’ expression ';'
+
+statement ::= “if” '(' expression ')' statement [ “else” statement | “while” '(' expression ')' statement | “return” [ expression ] | assignment | identifier ‘(’ [ expression {‘,’ expression } ] ‘)’ |
+‘{’ { statement } ‘}’ 
+
+function_definition ::= 'func' type identifier ‘(‘[identifier type {‘,’ identifier type } ]  ‘)’ ‘{‘ {statement} '}'
