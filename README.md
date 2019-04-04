@@ -9,7 +9,7 @@ Basic features:
 * Primitive (`integer`, `string`, `float`, `boolean`) and complex types (like structures)
 * Embeded `rate`, `direction`, `pair`, `trend`, `trader` types
 * some basic operators (`+`, `-`, `/`, `*`, `%`)
-* builtin functions `output`, `numtoa`, `toUSD` 
+* builtin functions `output`, `numtoa`, `rateToUSD` 
 * Small standard library with basic functions like print, type conversion and currency convertion
 * `if` and `while` control statements
 
@@ -45,7 +45,7 @@ func boolean isPositive(d direction) {...}
 There is 3 **builtin functions**:
 * `output`(takes string as an argument and prints it),
 * `numtoa` (takes 1 argument (`integer` or `float`), returns string)
-* `toUSD` (takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD).
+* `rateToUSD` (takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD).
 
 ## Control flow
 #### Assignment
@@ -103,6 +103,6 @@ This language is designed to simplify the presentation of processes in the forei
 * `trend` - trend of particular rate line. Has two fields: `trDirection` and `trendSize`. `trDirection` has type `direction` and means the price rises or drops, `trendSize` is greater or equal to 0. 
 
 #### Specific functions
-* `toUSD` - converts currency rate to USD. Takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD (`right = 'USD'`).  This funtion is VERY useful if you need to compare currency pairs with different right leg currency. 
+* `rateToUSD` - converts currency rate to USD. Takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD (`right = 'USD'`).  This funtion is VERY useful if you need to compare currency pairs with different right leg currency. 
 
 See `example2.txt` with example of using this types.
