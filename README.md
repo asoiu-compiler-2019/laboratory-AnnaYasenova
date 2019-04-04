@@ -1,28 +1,99 @@
-# compilers-2019
-main repository for lab works
+# ForExLang
+Statically typed imperative language
+
+## Overview
+Implemented in Python. Main use case - simulation of operations on the foreign exchange market.
+
+Basic features:
+
+* Primitive (`integer`, `string`, `float`, `boolean`) and complex types (like structures)
+* Embeded `rate`, `direction`, `pair`, `trend`, `trader` types
+* some basic operators (`+`, `-`, `/`, `*`, `%`)
+* builtin functions `output`, `numtoa`, `toUSD` 
+* Small standard library with basic functions like print, type conversion and data validation for embeded types
+* `if` and `while` control statements
+
+## Usage
+1) Clone this repository.
+2) Create `.py` file and import the `SemanticAnalyzer`.
+3) Create instance of `SemanticAnalyzer` and run `analyze_file` method.
+
+## Language overview
+### Supported types
+**Numbers** are represented with 2 possible types: integer and float with support of +, -, /, *, % operators between all of them. 
+**Strings** are like in most other languages
+```
+"String example"
+```
+**Character** is the one unicode character in single quotes
+```
+'c'
+```
+
+**Boolean** 
+```
+ugu, net // istead true and 
+```
+
+**Functions** are declared with `func` keyword followed by it's type.
+```
+func boolean isPositive(num direction) {...}
+```
+> NOTE: function parameters has format `identifier, type`.
 
 
-add to this repository all your completed work and continue till the end of semester
+There is 3 **builtin functions**:
+* `output`(takes string as an argument and prints it),
+* `numtoa` (takes 1 argument (`integer` or `float`), returns string)
+* `toUSD` (takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD).
 
+## Control flow
+#### Assignment
+Nothing unusual for primitive types.
+Complex types can be assigned with block or by accessing some specific property
+```
+let pair testPair;
+testPair.left = "EUR";
+testPair.right = "USD";
 
-Short reminder about how to fill readme
+```
+or
+```
+let pair testPair;
+testPair = {
+	left = "EUR";
+	right = "USD";
+}
+```
 
-1. Short description about your chosen theme
-(add your text here)
-2. Description of your language (types, built-in functions etc.)
-(add your text here)
-3. Description 
-(add your text here)
+#### If statement
+Conditional expression must evaluate to boolean type, else block is optional
+```
+if (r1.rateValue < r2.rateValue) {
+    return ->;
+}
+else {
+    return <-;
+}
+```
 
+#### While statement
+Conditional expression must evaluate to boolean type. 
+```
+let integer counter;
+counter = 3;
 
-Short reminder about tasks
+while (counter < 5) {
+    output(numtoa(counter));
+    counter = counter + 1;
+}
+```
 
-21 feb 1 lab - Backus–Naur form for your language
-28 feb 2 lab - lexical analyzer  - https://hackernoon.com/lexical-analysis-861b8bfe4cb0
-14 mar 3 lab - Syntax analyzer   - http://www.semware.com/html/02-parse.html
-28 mar 4 lab - Semantic analyzer - http://www.semware.com/html/04-parse.html 
-                                   http://www.semware.com/html/05-parse.html     
-                                   http://www.semware.com/html/06-parse.html
-11 apr 5 lab - translator for your diploma project
+## How does it work
+First step is parsing syntax to lexemes. Next is building and validating AST tree against semantic rules.
+Language is statically typed so static analysis is performed by semantic analyzer.
 
-["hip","hip"]
+## Features
+This language is designed to simplify the presentation of processes in the foreign exchange market and their simulation.
+
+#### Specific types
