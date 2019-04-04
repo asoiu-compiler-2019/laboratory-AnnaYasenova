@@ -10,7 +10,7 @@ Basic features:
 * Embeded `rate`, `direction`, `pair`, `trend`, `trader` types
 * some basic operators (`+`, `-`, `/`, `*`, `%`)
 * builtin functions `output`, `numtoa`, `toUSD` 
-* Small standard library with basic functions like print, type conversion and data validation for embeded types
+* Small standard library with basic functions like print, type conversion and currency convertion
 * `if` and `while` control statements
 
 ## Usage
@@ -32,12 +32,12 @@ Basic features:
 
 **Boolean** 
 ```
-ugu, net // istead true and 
+ugu, net // istead true and false
 ```
 
 **Functions** are declared with `func` keyword followed by it's type.
 ```
-func boolean isPositive(num direction) {...}
+func boolean isPositive(d direction) {...}
 ```
 > NOTE: function parameters has format `identifier, type`.
 
@@ -97,3 +97,12 @@ Language is statically typed so static analysis is performed by semantic analyze
 This language is designed to simplify the presentation of processes in the foreign exchange market and their simulation.
 
 #### Specific types
+* `pair` - currency pair. Has two fields: `left` and `right`. (Price of pair always in the right currency). For example: if left = "EUR" and right = "USD" this is similar to the EURUSD currency.
+* `rate` - currency rate (price of particular currency pair). Has two fields: `ratePair` and `rateValue`. `ratePair` has type `pair`, `rateValue` - price of currency pair.
+* `direction` - can be `->` (direction up) and `<-` (direction down). 
+* `trend` - trend of particular rate line. Has two fields: `trDirection` and `trendSize`. `trDirection` has type `direction` and means the price rises or drops, `trendSize` is greater or equal to 0. 
+
+#### Specific functions
+* `toUSD` - converts currency rate to USD. Takes 1 argument (with type `rate`), returns `rate` with right pair leg equal to USD (`right = 'USD'`).  This funtion is VERY useful if you need to compare currency pairs with different right leg currency. 
+
+See `example2.txt` with example of using this types.
